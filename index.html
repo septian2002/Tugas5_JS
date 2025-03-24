@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manajemen Produk</title>
+</head>
+<body>
+    <h1>Manajemen Produk</h1>
+    <div>
+        <input type="text" id="productName" placeholder="Nama Produk" />
+        <input type="number" id="productPrice" placeholder="Harga Produk" />
+        <button id="addProductBtn">Tambah Produk</button>
+    </div>
+    <ul id="productList"></ul>
+    <script>
+        // List data produk awal
+        let products = [
+            { id: 1, name: 'Produk A', price: 10000 },
+            { id: 2, name: 'Produk B', price: 20000 },
+            { id: 3, name: 'Produk C', price: 30000 },
+            { id: 4, name: 'Produk D', price: 40000 },
+            { id: 5, name: 'Produk E', price: 50000 }
+        ];
+
+        // Menampilkan semua produk
+        const displayProducts = () => {
+            const productList = document.getElementById('productList');
+            productList.innerHTML = ''; // Kosongkan daftar produk
+            products.forEach(({ id, name, price }) => {
+                const li = document.createElement('li');
+                li.textContent = `${name} - Rp${price}`;
+                li.dataset.id = id; // Menyimpan ID produk di atribut data
+                li.addEventListener('click', removeProduct); // Event listener untuk menghapus produk
+                productList.appendChild(li);
+            });
+        };
+
+        // Menambahkan produk
+        const addProduct = () => {
+            const name = document.getElementById('productName').value;
+            const price = parseFloat(document.getElementById('productPrice').value);
+            if (name && !isNaN(price)) {
+                const newProduct = { id: products.length + 1, name, price };
+                products = [...products, newProduct]; // Menggunakan spread operator
+                displayProducts();
+                clearInputs();
+            } else {
+                alert('Silakan masukkan nama dan harga produk yang valid.');
+            }
+        };
+
+        // Menghapus produk
+        const removeProduct = (event) => {
+            const { id } = event.target.dataset; // Destructuring untuk mendapatkan ID
+            products = products.filter(product => product.id != id); // Menghapus produk berdasarkan ID
+            displayProducts();
+        };
+
+        // Menghapus input setelah menambahkan produk
+        const clearInputs = () => {
+            document.getElementById('productName').value = '';
+            document.getElementById('productPrice').value = '';
+        };
+
+        // Event listener untuk tombol tambah produk
+        document.getElementById('addProductBtn').addEventListener('click', addProduct);
+
+        // Menampilkan produk awal
+        displayProducts();
+    </script>
+</body>
+</html>
